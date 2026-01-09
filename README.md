@@ -2,8 +2,7 @@
 
 # Description
 
-In this assignment, you'll translate a provided Figma design into a functional webpage using React Vite, Tailwind CSS, and Tanstack Query, then deploy it using vercel. After you deploy the app, update the readme below.
-Hosted web URL: ....
+In this assignment, you'll translate a provided Figma design into a functional webpage using React Vite, Tailwind CSS, and Tanstack Query.
 
 You'll be provided with a basic project setup, and your task will be to implement the design by writing components that reusable and utilizing Tailwind's classes.
 
@@ -30,7 +29,6 @@ The goal is to assess your ability to:
 - Create a responsive layout.
 - Routing and rendering method.
 - Implement Tanstack Query
-- Deployment
 
 # Assignment Objectives
 
@@ -44,8 +42,6 @@ The goal is to assess your ability to:
 - Responsive Design: Ensure your implementation is responsive across different screen sizes, as defined in the Figma design. Use Tailwind's responsive modifiers.
 - Adherence to Design: Your final webpage should closely match the visual design provided in the Figma file.
 - Implement The MovieDB using Tanstack Query and Axios.
--
-- Deploy your next app
 
 # Getting Started
 
@@ -85,7 +81,6 @@ The evaluation for this assignment will be based on the following criteria:
 
 1.  **Basic concept and project structure:** How you understand the concept of React Vite and how you manage the project structure
 2.  **Tanstack Query** How you understand about Tanstack Query to retrieve data from The MovieDB API.
-3.  **Deployment & best practice:** How you deploy your app on vercel
 
 ---
 
