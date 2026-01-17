@@ -17,8 +17,8 @@ const Header = () => {
             />
           </a>
           <nav className="hidden lg:flex lg:justify-between items-center w-50 text-white">
-            <a href="#home">Home</a>
-            <a href="#favourite">Favourite</a>
+            <a href="/home">Home</a>
+            <a href="/favourite">Favourite</a>
           </nav>
         </div>
 
@@ -31,7 +31,7 @@ const Header = () => {
         />
 
         <div className="flex justify-between w-18 h-6 lg:hidden">
-          <a href="#search" className="flex items-center">
+          <a href="/search" className="flex items-center">
             <img
               src="../assets/Icon-Search-White.svg"
               alt="Search Icon"

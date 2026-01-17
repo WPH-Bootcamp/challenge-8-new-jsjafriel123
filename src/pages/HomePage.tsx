@@ -1,17 +1,13 @@
-// import Header from "../components/HeaderSection";
-import Hero from "../components/HeroSection";
-import Trending from "../components/TrendingSection";
-import Footer from "../components/FooterSection";
-import NewRelease from "../components/NewReleaseSection/NewRelease";
+import HeroSlider from "../components/HeroSection/HeroSlider";
+import NewRelease from "../components/NewReleaseSection/NewReleaseScroll";
+import TrendingNow from "../components/TrendingSection/TrendingScroll";
 
 export function HomePage() {
   return (
     <>
-      {/* <Header /> */}
-      <Hero />
-      <Trending />
+      <HeroSlider />
+      <TrendingNow />
       <NewRelease />
-      {/* <Footer /> */}
     </>
   );
 }

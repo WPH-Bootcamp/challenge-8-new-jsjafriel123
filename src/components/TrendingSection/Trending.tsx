@@ -67,7 +67,6 @@ const Trending = () => {
             className="size-11 lg:size-14"
           />
         </button>
-        {"test "}
         <button
           type="button"
           aria-label="Scroll Left"
