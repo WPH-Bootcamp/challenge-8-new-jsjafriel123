@@ -3,6 +3,8 @@ import { useTopRatedMovies } from "../../queries/movies/useTopRated";
 import { useMovieVideos } from "../../queries/movies/useMovieVideos";
 import { TrailerModal } from "../UI/TrailerModal";
 import { BASE_URL } from "../../constants/api";
+import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 const SLIDE_INTERVAL = 5000; // 5 seconds
 
@@ -30,7 +32,7 @@ export default function HeroSlider() {
     return <div>Loading...</div>;
   }
   if (isError || movies.length === 0) {
-    return <div>Error loading movies...</div>;
+    toast.error("Failed to load movies");
   }
 
   const activeMovie = movies[activeIndex];
@@ -91,12 +93,12 @@ export default function HeroSlider() {
               />
             </a>
             {/* Button Detail */}
-            <a
-              href="/DetailPage"
+            <Link
+              to={`/movie/${activeMovie.id}`}
               className="flex items-center justify-center h-11 lg:h-13"
             >
               See Detail
-            </a>
+            </Link>
           </div>
         </div>
       </section>

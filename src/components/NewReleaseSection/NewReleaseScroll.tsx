@@ -38,11 +38,10 @@ export default function NewRelease() {
 
           {/* Gradient Box */}
           <div className="absolute bottom-0 w-full h-[334px] lg:h-[397px] bg-linear-to-t from-black to-black/0 z-10"></div>
-          <div ref={loadMoreRef} className="h-1 col-span-full" />
+          {/* Intersection Observer target */}
+          <div ref={loadMoreRef} className="h-1 col-span-full " />
         </div>
       </div>
-      {/* Intersection Observer target */}
-      {/* <div ref={loadMoreRef} className="h-10" /> */}
 
       {isFetchingNextPage && (
         <p className="text-center mt-4 text-sm opacity-70">Loading more…</p>

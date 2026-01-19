@@ -1,6 +1,62 @@
+import { useParams } from "react-router-dom";
+import { useMovieDetail } from "../../queries/movies/useMovieDetail";
+import { toast } from "sonner";
 import CastCrew from "../CastCrewSection/CastCrew";
+import { BASE_URL } from "../../constants/api";
+import { format, parseISO } from "date-fns";
+import { useMovieVideos } from "../../queries/movies/useMovieVideos";
+import { useState } from "react";
+import { TrailerModal } from "../UI/TrailerModal";
 
 const DetailContent = () => {
+  const { id } = useParams();
+  const [isTrailerOpen, setIsTrailerOpen] = useState(false);
+
+  const movieId = Number(id);
+  if (!movieId) {
+    return <div>Invalid movie ID</div>;
+  }
+  const { data, isLoading, isError } = useMovieDetail(movieId);
+
+  if (isLoading) {
+    return <div className="p-6">Loading...</div>;
+  }
+
+  if (isError) {
+    toast.error("Failed to load movie details");
+    return null;
+  }
+
+  const movieDetail = data;
+  const releaseDate = format(parseISO(movieDetail.release_date), "dd-MMM-yyyy");
+  const ageLimit = movieDetail.adult ? "18" : "13";
+  type genreType = {
+    id: number;
+    name: string;
+  };
+  const genres =
+    movieDetail.genres.length > 2
+      ? movieDetail.genres
+          .slice(0, 3)
+          .map((genre: genreType) => genre.name)
+          .join(", ")
+      : movieDetail.genres
+          .slice(0, movieDetail.genres.length)
+          .map((genre: genreType) => genre.name)
+          .join(", ");
+
+  const longGenre = movieDetail.genres.length > 2 ? true : false;
+
+  // Trailer
+  const { data: videoData } = useMovieVideos(movieId);
+
+  const hasTrailer = videoData?.results?.some(
+    (v) => v.type === "Trailer" && v.site === "YouTube",
+  );
+  const trailer = videoData?.results.find(
+    (v) => v.site === "YouTube" && v.type === "Trailer",
+  );
+
   return (
     <section
       id="detail"
@@ -12,15 +68,19 @@ const DetailContent = () => {
         className="flex absolute top-0 h-98 items-start overflow-hidden w-screen lg:h-[1024px] z-0"
       >
         <img
-          src="\assets\Hero-CaptainAmerica.svg"
-          alt="Hero Image"
+          src={
+            movieDetail.backdrop_path
+              ? `${BASE_URL.image}${movieDetail.backdrop_path}`
+              : "/assets/placeholder-landscape.svg"
+          }
+          alt={movieDetail.title}
           className="size-full object-cover object-top"
         />
         <div className="absolute bottom-0 w-full h-[400px] lg:h-full  bg-linear-to-t from-black to-black/0 z-5 "></div>
       </div>
 
       {/* <!-- Hero Text + Button --> */}
-      <div className="flex flex-col mt-[222px] w-[393px] gap-6 px-4 pb-10 h-[1187px] lg:gap-12 lg:mt-[412px] lg:w-[1160px] lg:h-[912px] z-20 ">
+      <div className="flex flex-col mt-[222px] w-[393px] gap-6 px-4 pb-10 h-[1187px] lg:gap-12 lg:mt-[412px] lg:w-[1160px] lg:h-[960px] z-20 ">
         {/* HEADER */}
         <div className="w-full h-[407px] lg:h-[384px] ">
           {/* GRID Container  */}
@@ -28,15 +88,19 @@ const DetailContent = () => {
             {/* Poster */}
             <div className="row-span-1 lg:row-span-5">
               <img
-                src="\assets\Poster-CaptainAmerica.svg"
-                alt="Poster"
+                src={
+                  movieDetail.poster_path
+                    ? `${BASE_URL.image}${movieDetail.poster_path}`
+                    : "/assets/placeholder-portrait.svg"
+                }
+                alt={movieDetail.title}
                 className="w-[116px] h-[171px] lg:w-[260px] lg:h-[384px] "
               />
             </div>
             {/* Title */}
             <div className="row-span-1 lg:col-start-2 lg:row-start-1 lg:row-span-2 flex flex-col w-auto h-[100px] gap-1 lg:gap-6 lg:h-[102px]">
               <h1 className="font-bold text-[#FDFDFD] text-[20px]/[34px] lg:text-[40px]/[56px]">
-                Captain America: Brave New World
+                {movieDetail.title}
               </h1>
               <p className="inline-flex gap-1 items-center">
                 <img
@@ -45,7 +109,7 @@ const DetailContent = () => {
                   className="size-[20px] lg:size-[24px]"
                 />
                 <span className="text-white text-[14px]/[28px] lg:text-[16px]/[30px]">
-                  12 February 2025
+                  {releaseDate}
                 </span>
               </p>
             </div>
@@ -56,7 +120,13 @@ const DetailContent = () => {
                 className="flex flex-col items-center w-auto h-[200px] lg:items-start lg:w-auto lg:h-[236px] gap-6 "
               >
                 <div className="flex justify-between w-[361px] h-[44px] lg:w-[288px] lg:h-[52px]">
-                  <a className="inline-flex w-[310px] h-[44px] gap-2 rounded-full bg-[#961200] text-white items-center justify-center lg:w-[220px] lg:h-[52px]">
+                  {/* <a className="inline-flex w-[310px] h-[44px] gap-2 rounded-full bg-[#961200] text-white items-center justify-center lg:w-[220px] lg:h-[52px]"> */}
+                  <a
+                    className={`${
+                      hasTrailer ? "inline-flex" : "hidden"
+                    } w-[310px] h-[44px] gap-2 rounded-full bg-[#961200] text-white items-center justify-center lg:w-[220px] lg:h-[52px] cursor-pointer`}
+                    onClick={() => setIsTrailerOpen(true)}
+                  >
                     <span>Watch Trailer</span>
                     <img
                       src="\assets\Icon-Play.svg"
@@ -88,11 +158,11 @@ const DetailContent = () => {
                       Rating
                     </p>
                     <p className="font-semibold text-[18px]/[32px] text-[#D5D7DA] lg:text-[20px]/[34px] ">
-                      6.2/10
+                      {movieDetail.vote_average.toFixed(1)} / 10
                     </p>
                   </div>
                   {/* Card 2 */}
-                  <div className="flex flex-col items-center w-[112.33px] h-[120px] border-[1px] border-[#252B37] bg-black rounded-2xl p-4 gap-2 lg:w-[276px] lg:h-[146px] lg:p-5 lg:gap-2 ">
+                  <div className="flex flex-col items-center w-[112.33px] h-[120px] border-[1px] border-[#252B37] bg-black rounded-2xl px-1 py-4 gap-2 lg:w-[276px] lg:h-[146px] lg:p-5 lg:gap-2 ">
                     <img
                       src="\assets\Icon-Video.svg"
                       alt="Video Icon"
@@ -101,8 +171,14 @@ const DetailContent = () => {
                     <p className="font-normal text-[12px]/[24px] text-[#D5D7DA] lg:text-[16px]/[30px] ">
                       Genre
                     </p>
-                    <p className="font-semibold text-[18px]/[32px] text-[#D5D7DA] lg:text-[20px]/[34px] ">
-                      Action
+                    <p
+                      className={`font-semibold text-[#D5D7DA] text-center ${
+                        longGenre
+                          ? "text-[12px]/[13px] lg:text-[16px]/[18px]"
+                          : "text-[16px]/[18px] lg:text-[20px]/[24px]"
+                      }`}
+                    >
+                      {genres}
                     </p>
                   </div>
                   {/* Card 3 */}
@@ -116,7 +192,7 @@ const DetailContent = () => {
                       Age Limit
                     </p>
                     <p className="font-semibold text-[18px]/[32px] text-[#D5D7DA] lg:text-[20px]/[34px] ">
-                      13
+                      {ageLimit}
                     </p>
                   </div>
                 </div>
@@ -124,21 +200,23 @@ const DetailContent = () => {
             </div>
           </div>
         </div>
+        {isTrailerOpen && trailer && (
+          <TrailerModal
+            videoKey={trailer.key}
+            onClose={() => setIsTrailerOpen(false)}
+          />
+        )}
 
         {/* OVERVIEW */}
-        <div className="flex flex-col w-auto h-[182px] gap-2 lg:h-[114px] ">
+        <div className="flex flex-col w-auto h-[182px] gap-2 lg:h-[114px]">
           <h2>Overview</h2>
-          <p className="text-[14px]/[28px] font-normal text-[#A4A7AE] lg:text-[16px]/[30px]">
-            After meeting with newly elected U.S. President Thaddeus Ross, Sam
-            finds himself in the middle of an international incident. He must
-            discover the reason behind a nefarious global plot before the true
-            mastermind has the entire world seeing red.
+          <p className="text-[14px]/[28px] font-normal text-[#A4A7AE] lg:text-[16px]/[30px] overflow-y-auto">
+            {movieDetail.overview}
           </p>
         </div>
         {/* CAST&CREW */}
-        <CastCrew />
+        <CastCrew movieId={movieId} />
       </div>
-      {/* <!-- Hero Image --> */}
     </section>
   );
 };

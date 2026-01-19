@@ -1,8 +1,4 @@
-// import { useState } from "react";
-
 const Header = () => {
-  // const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   return (
     <header className="relative">
       {/* Top Bar */}
@@ -17,7 +13,7 @@ const Header = () => {
             />
           </a>
           <nav className="hidden lg:flex lg:justify-between items-center w-50 text-white">
-            <a href="/home">Home</a>
+            <a href="/">Home</a>
             <a href="/favourite">Favourite</a>
           </nav>
         </div>
@@ -27,7 +23,7 @@ const Header = () => {
           id="search"
           name="search"
           placeholder="Search Movie"
-          className="hidden lg:flex lg:w-[243px] lg:h-14 lg:rounded-xl lg:border-[1px] lg:border-[#252B37] lg:py-2 lg:px-6 lg:bg-[#0A0D1299]/60 lg:blur-[40%] lg:bg-[url('..\public\assets\Icon-Search.svg')] lg:bg-no-repeat lg:bg-left lg:text-4"
+          className="hidden lg:flex lg:w-[243px] lg:h-14 lg:rounded-xl lg:border-[1px] lg:border-[#252B37] lg:py-2 lg:pl-10 lg:bg-[#0A0D1299]/60 lg:blur-[40%] lg:bg-[url('..\public\assets\Icon-Search.svg')] lg:bg-no-repeat lg:bg-position-[left_10px_center] lg:text-4"
         />
 
         <div className="flex justify-between w-18 h-6 lg:hidden">
