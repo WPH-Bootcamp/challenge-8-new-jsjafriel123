@@ -1,8 +1,13 @@
+import { useState } from "react";
+import MobileMenu from "./MobileMenu";
+
 const Header = () => {
+  const [open, setOpen] = useState(false);
+
   return (
     <header className="relative">
       {/* Top Bar */}
-      <div className="fixed inset-x-0 top-0 z-50 flex w-full h-13 items-center justify-between bg-black/0 px-4 lg:h-18 lg:px-35 lg:py-10 backdrop-blur-2xl">
+      <div className="fixed inset-x-0 top-0 z-30 flex w-full h-13 items-center justify-between bg-black/0 px-4 lg:h-18 lg:px-35 lg:py-10 backdrop-blur-2xl">
         {/* Logo */}
         <div className="flex justify-between w-102.5">
           <a href="/" className="flex items-center">
@@ -34,7 +39,11 @@ const Header = () => {
               className="size-6"
             />
           </a>
-          <a href="#menu" className="flex items-center">
+          <a
+            aria-label="Open menu"
+            onClick={() => setOpen(true)}
+            className="flex items-center"
+          >
             <img
               src="../assets/Icon-Hamburger.svg"
               alt="Menu Icon"
@@ -43,6 +52,7 @@ const Header = () => {
           </a>
         </div>
       </div>
+      <MobileMenu open={open} onClose={() => setOpen(false)} />
     </header>
   );
 };
